@@ -79,6 +79,18 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
+    def reset_password(self, token, new_password):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return False
+        if data.get('reset') != self.id:
+            return False
+        self.password = new_password
+        db.session.add(self)
+        return True
+
     @property
     def password(self):
         raise AttributeError('password is not readable attribute')
@@ -106,6 +118,10 @@ class User(UserMixin, db.Model):
         self.confirmed = True
         db.session.add(self)
         return True
+
+    def generate_reset_token(self, expiration=3600):
+        s = Serializer(current_app.config['SECRET_KEY'], expiration)
+        return s.dumps({'reset': self.id})
 
     def generate_email_change_token(self, new_email, expiration=3600):
         s = Serializer(current_app.config['SECRET_KEY'], expiration)
