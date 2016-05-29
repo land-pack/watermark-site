@@ -25,6 +25,13 @@ export SECRET_KEY='some hard to guess string'
 export MAIL_USERNAME='your-email-username'
 export MAIL_PASSWORD='your-email-password'
 ```
+Configure your app
+------------------
+In this app,client can  will upload some image to the server! so you need to get a path for the app!
+and i have default setting! but on Linux ,you should get a permission to the app! simple run a shell
+```shell
+sudo chmod a+w /var/lib/flask-temp/watermark-site/
+```
 
 Init database 
 -------------

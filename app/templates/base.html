@@ -41,18 +41,18 @@
                 <li><a href="/">Home</a></li>
                 {% if current_user.is_authenticated %}
                 <li>
-                    <a href="{{ url_for('main.user',username=current_user.username)}}">
-                        Profile
+                    <a href="{{ url_for('gallery.index')}}">
+                        Album
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        Gallery
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
+                    <a href="{{ url_for('gallery.upload')}}">
                         Upload
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Embed
                     </a>
                 </li>
                 <li>
@@ -85,7 +85,6 @@
         </div>
     </div>
 </div>
-
 {% block content %}
 <div class="container">
     {% for message in get_flashed_messages() %}
@@ -96,9 +95,6 @@
     {% endfor %}
     {% block page_content %} {% endblock %}
 </div>
-
 {% endblock %}
-
-
 </body>
 </html>

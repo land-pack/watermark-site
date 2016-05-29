@@ -11,7 +11,7 @@ class Config:
     ADMIN = '123@qq.com'
     LANDPACK_POSTS_PER_PAGE = 20
     LANDPACK_IMAGE_PER_PAGE = 5
-    UPLOAD_FOLDER = '/var/lib/watermark-site/uploads'
+    UPLOAD_FOLDER = '/var/lib/flask-tmp/watermark-site'
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'git'])
 
     @staticmethod

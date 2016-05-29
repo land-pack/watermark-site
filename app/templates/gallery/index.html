@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block page_content %}
+
+{% for i in range(10) %}
+<div class="col-lg-4">
+    <h1>Hello Album -- {{ i}}</h1>
+</div>
+
+{% endfor %}
+{% endblock %}
