@@ -112,9 +112,7 @@ def send_image(category, filename):
     return send_from_directory(personal_dir, filename)
 
 
-@gallery.route('/contact')
-def contact():
-    return 'nothing'
+
 
 
 @gallery.route('/editting/<category>/<filename>')
