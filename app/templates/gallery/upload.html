@@ -2,12 +2,23 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 
-{% block page_content %}
+{% block content %}
 
-<div class="col-lg-4">
+<div class="col-md-4">
+
+</div>
+
+<div class="col-md-4">
 
 
     {{ wtf.quick_form(form,enctype="multipart/form-data")}}
+    <br>
+    <p>
+        Add new category?
+        <a href="{{ url_for('gallery.create_album') }}">
+            Click here to add new category
+        </a>
+    </p>
 
 </div>
 {% endblock %}

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% block head %}
+    {% include "_header.html" %}
+    {% endblock %}
+</head>
+<body>
+
+{% include "_nav.html" %}
+
+<div class="container main">
+    {% block content %}
+    {% endblock %}
+</div>
+<footer>
+    <div class="container center">
+        Copyright &copy; 2016 , Frank AK . All Rights Reserved
+    </div>
+</footer>
+</body>
+</html>
+

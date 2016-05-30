@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 
-
-{% block nav %}
-{{super()}}
-{% endblock %}
-
 {% block content %}
 <div class="row">
     <ul class="thumbnails">
@@ -15,8 +10,7 @@
         <li class="gallery span4">
             <a href="{{ url_for('gallery.lists',category_id=albums[index].id) }}" class="thumbnail">
                 {% with path = '1/imut2.jpg' %}
-                <img src="{{ url_for('gallery.send_image',category=albums[index].id,filename=albums[index].conver_url )}}"
-                     alt=""
+                <img src="{{ url_for('gallery.send_image',category=albums[index].id,filename=albums[index].conver_url )}}" alt=""
                      class="span4"/>
 
                 {% endwith %}
@@ -29,4 +23,5 @@
 
     </ul>
 </div>
+
 {% endblock %}

@@ -1,0 +1,51 @@
+<div class="navbar navbar-inverse navbar-static-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <ul class="nav">
+                <li>
+                    <a href="{{ url_for('main.index')}}" class="brand"><b>Frank AK</b></a>
+                </li>
+                <li class="active">
+                    <a href="{{ url_for('main.index')}}">Home</a>
+                </li>
+                {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{url_for('gallery.index')}}">Portfolio</a>
+                </li>
+                <!--
+                <li >
+                    <a href="/blog/">Blog</a>
+                </li>
+                -->
+
+                <li>
+                    <a href="{{ url_for('gallery.upload') }}">Uploads</a>
+                </li>
+                <li>
+                    <a href="{{ url_for('gallery.contact') }}">Contact</a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right pull-right">
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ current_user.gravatar(size=18) }}">
+
+                        Account <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('auth.change_password')}}">Change Password</a></li>
+                        <li><a href="{{url_for('auth.change_email_request')}}">Change Email</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Sign In</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>

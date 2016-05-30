@@ -2,7 +2,12 @@
 {% import "bootstrap/wtf.html" as wtf %}
 
 
-{% block page_content %}
-<h1>Create your album here!</h1>
+{% block content %}
+<div class="col-lg-4">
 
+</div>
+<div class="col-lg-4">
+    <H1>Create a New Album</H1>
+    {{wtf.quick_form(form) }}
+</div>
 {% endblock %}

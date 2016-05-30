@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    {% block head %}
+    <link rel="icon" type="image/png" href="http://media.tylergriffinphotography.com/img/favicon.png"/>
+    <title>Home :: Tyler Griffin Photography</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="google-site-verification" content="fFSB2Uapxdane0mHui9_hUrg8Ac_loOLMufnNnh2TFs"/>
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/typography.css')}} " type="text/css"
+          media="screen,projection"/>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/custom.css')}}" type="text/css"
+          media="screen,projection"/>
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap.min.css')}}" type="text/css"
+          media="screen,projection"/>
+
+    <link rel="stylesheet" href="{{url_for('static',filename='css/bootstrap-resp.min.css')}}" type="text/css"
+          media="screen,projection"/>
+    <link rel="alternate" href="http://tylergriffinphotography.com/blog/feed/" title="RSS" type="application/rss+xml"/>
+    <script src="{{url_for('static',filename='js/mint.js') }}" type="text/javascript"></script>
+    <script src="{{url_for('static',filename='js/jquery.min.js')}} " type="text/javascript"></script>
+    <script src="{{ url_for('static',filename='js/bootstrap.min.js')}} " type="text/javascript"></script>
+    {% endblock %}
+</head>
+<body>
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle"
+                    data-toggle="collapse" data-target=".navbar-collapse"><span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Landpack</a></div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li>
+                    <a href="{{ url_for('gallery.index')}}">
+                        Album
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('gallery.upload')}}">
+                        Upload
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Embed
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        Extract
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img src="{{ url_for('static', filename='img/h.png') }}" width="40" height="40">
+
+                        Account <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ url_for('auth.change_password')}}">Change Password</a></li>
+                        <li><a href="{{url_for('auth.change_email_request')}}">Change Email</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">Log Out</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li><a href="{{ url_for('auth.login') }}">Sign In</a></li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+<!--
+<div id="logo">
+    <a href="/"><img src="http://media.tylergriffinphotography.com/img/logo.png" alt="Tyler Griffin Photography" /></a>
+</div>
+-->
+<div class="container main">
+
+    {% block content %}
+
+    {% endblock %}
+
+
+</div>
+<footer>
+    <div class="container center">
+        Copyright &copy; 2016 , Frank AK . All Rights Reserved
+    </div>
+</footer>
+</body>
+</html>
+
