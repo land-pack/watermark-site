@@ -6,7 +6,7 @@ from flask.ext.login import login_user, login_required, current_user
 from werkzeug import secure_filename
 from ..models import User, Image, Category
 from . import gallery
-from .forms import ImageForm, CategoryForm
+from .forms import ImageForm, CategoryForm, ImageEdit
 from app import db
 
 
@@ -115,3 +115,11 @@ def send_image(category, filename):
 @gallery.route('/contact')
 def contact():
     return 'nothing'
+
+
+@gallery.route('/edit/<category>/<filename>')
+def edit(category, filename):
+    form = ImageEdit()
+    if form.validate_on_submit():
+        print form.x1.data
+    return render_template('gallery/image_edit.html', filename=filename, form=form)

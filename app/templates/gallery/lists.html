@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="gallery-title">
+    <h2>Headshots</h2>
+    <a href="/gallery/album/">&laquo; Back to Portfolio</a>
+</div>
+
+
+<div class="gallery masonry">
+    {% for image in images %}
+    <div class="box photo masonry-brick">
+        <a href="{{ url_for('gallery.edit',category=image.category_id,filename=image.filename)}}" class="thumbnail">
+            <img src="{{ url_for('gallery.send_image',category=image.category_id,filename=image.filename) }}"
+                 alt="{{ image.name }}"/>
+        </a>
+    </div>
+
+    {% endfor %}
+
+</div>
+<div class="modal hide fade" id="lightbox">
+    <div class="modal-body">
+    </div>
+</div>
+
+<script src="{{url_for('static',filename='js/masonry.min.js')}} "></script>
+<script>
+    $(function () {
+        var $gallery = $('.gallery');
+        $gallery.imagesLoaded(function () {
+            $gallery.masonry({
+                itemSelector: '.box',
+                columnWidth: function (containerWidth) {
+                    return containerWidth / 3;
+                }
+            });
+        });
+
+        var lightbox = $('#lightbox');
+        var inner = lightbox.find('.modal-body');
+
+        inner.css({maxHeight: 'none'});
+
+
+    });
+</script>
+
+
+{% endblock %}

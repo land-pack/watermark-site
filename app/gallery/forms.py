@@ -34,3 +34,10 @@ class ImageForm(Form):
 
     image = FileField('Your photo', validators=[DataRequired(), DataRequired()])
     submit = SubmitField('Upload')
+
+
+class ImageEdit(Form):
+    text = StringField('The context of watermark')
+    watermark = SelectField('Watermark Type', choices=[('Visible', 'visible'), ('Invisible', 'invisible'),
+                                                       ('Print-watermark', 'print-watermark')])
+    submit = SubmitField("Go")
