@@ -3,8 +3,37 @@
 
 
 {% block content %}
-
-<div class="center">
-    <h1>Edit you image here!</h1>
+<div id="gallery-title">
+    <h2>Embed watermark here!</h2>
+    <a href="{{url_for('gallery.lists',category_id=category)}}">&laquo; Back to category</a>
 </div>
+
+<div class="container demo">
+    <div style="float: left; width: 50%;">
+        <p class="instructions">
+            Click and drag on the image to select an area.
+        </p>
+
+        <div class="frame" style="margin: 0 0.3em; width: 300px; height: 300px;">
+            <img id="myphoto" src="{{ url_for('gallery.single_image',category=category,filename=filename) }}"
+                 style="width: 300px; height: 300px;"/>
+        </div>
+    </div>
+
+    <div style="float: left; width: 50%;">
+        <p style="font-size: 110%; font-weight: bold; padding-left: 0.1em;">
+            Selection Preview
+        </p>
+
+        <div class="frame"
+             style="margin: 0 1em; width: 100px; height: 100px;">
+            <div id="preview" style="width: 100px; height: 100px; overflow: hidden;">
+                <img src="{{ url_for('gallery.single_image',category=category,filename=filename) }}" style="width: 100px; height: 100px;"/>
+            </div>
+        </div>
+        {{ wtf.quick_form(form)}}
+    </div>
+</div>
+
+
 {% endblock %}

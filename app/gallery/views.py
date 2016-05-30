@@ -117,9 +117,19 @@ def contact():
     return 'nothing'
 
 
+@gallery.route('/editting/<category>/<filename>')
+def single_image(category, filename):
+    # personal_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], category)
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    if user is None:
+        abort(404)
+    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
+    return send_from_directory(personal_dir, filename)
+
+
 @gallery.route('/edit/<category>/<filename>')
 def edit(category, filename):
     form = ImageEdit()
     if form.validate_on_submit():
         print form.x1.data
-    return render_template('gallery/image_edit.html', filename=filename, form=form)
+    return render_template('gallery/image_edit.html', category=category, filename=filename, form=form)
