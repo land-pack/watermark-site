@@ -41,3 +41,10 @@ class SwitchAlgorithmForm(Form):
     type = SelectField('Watermark Type', choices=[('visible_mark', 'visible'), ('invisible_mark', 'invisible'),
                                                   ('print_watermark', 'print-watermark')])
     submit = SubmitField("Go")
+
+
+class InvisibleForm(Form):
+    text = StringField('The context of watermark')
+    type = SelectField('Invisible Watermark Algorithm', choices=[('lsb', 'LSB algorithm'), ('qim', 'QIM algorithm'),
+                                                                 ('dft', 'Discrete Fourier Transform')])
+    submit = SubmitField("Process")

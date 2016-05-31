@@ -6,7 +6,7 @@ from flask.ext.login import login_user, login_required, current_user
 from werkzeug import secure_filename
 from ..models import User, Image, Category
 from . import gallery
-from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm
+from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm, InvisibleForm
 from app import db
 
 
@@ -139,7 +139,11 @@ def visible_mark(category, filename):
 
 @gallery.route('/ivs/<category>/<filename>', methods=['GET', 'POST'])
 def invisible_mark(category, filename):
-    return render_template('gallery/area_select.html', category=category, filename=filename)
+    form = InvisibleForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            print 'Algorithm', form.type.data
+    return render_template('gallery/invisible.html', category=category, filename=filename, form=form)
 
 
 @gallery.route('/pvs/<category>/<filename>', methods=['GET', 'POST'])
