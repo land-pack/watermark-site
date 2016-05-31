@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<script src="{{ url_for('static',filename='areaselect/jquery.js')}}"></script>
+<script src="{{ url_for('static',filename='areaselect/jq.select.js')}}"></script>
+
+<img src="{{ url_for('gallery.single_image',category=category,filename=filename)}}" width="540" height="600">
+<button id="get">Get!</button>
+
+<div id="preview" style="display: inline-block"></div>
+
+<script>
+
+
+    (function () {
+        $('img').load(function () {
+            var options = {
+                initAreas: [
+                    {"x": 280, "y": 93, "width": 50, "height": 50},
+                    {"x": 309, "y": 195, "width": 183, "height": 386},
+                    {"x": 298, "y": 5, "width": 45, "height": 55}]
+            };
+            $(this).areaSelect(options);
+            showPreview($('img').areaSelect('get'));
+            $('img').areaSelect('bindChangeEvent', function (event, data) {
+                showPreview(data.areas);
+            });
+
+            $('#get').click(function () {
+                alert(JSON.stringify($('img').areaSelect('get')));
+            });
+        });
+
+        function showPreview(areas) {
+            var $preview = $('#preview');
+            $preview.empty();
+            for (var index in areas) {
+                var area = areas[index];
+                var $img = $('<div/>').css({
+                    'height': area.height,
+                    'display': 'inline-block',
+                    'width': area.width,
+                    'margin': '10px',
+                    'background-image': 'url({{ url_for("gallery.single_image",category=category,filename=filename)}})',
+                    'background-position': -area.x + 'px ' + (-area.y + 'px')
+                });
+                $preview.append($img);
+            }
+        }
+
+    })();
+</script>
+{% endblock %}
+

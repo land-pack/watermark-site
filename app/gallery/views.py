@@ -6,7 +6,7 @@ from flask.ext.login import login_user, login_required, current_user
 from werkzeug import secure_filename
 from ..models import User, Image, Category
 from . import gallery
-from .forms import ImageForm, CategoryForm, ImageEdit
+from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm
 from app import db
 
 
@@ -112,9 +112,6 @@ def send_image(category, filename):
     return send_from_directory(personal_dir, filename)
 
 
-
-
-
 @gallery.route('/editting/<category>/<filename>')
 def single_image(category, filename):
     # personal_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], category)
@@ -125,9 +122,26 @@ def single_image(category, filename):
     return send_from_directory(personal_dir, filename)
 
 
-@gallery.route('/edit/<category>/<filename>')
-def edit(category, filename):
-    form = ImageEdit()
-    if form.validate_on_submit():
-        print form.x1.data
-    return render_template('gallery/image_edit.html', category=category, filename=filename, form=form)
+@gallery.route('/swa/<category>/<filename>', methods=['GET', 'POST'])
+def switch_algorithm(category, filename):
+    form = SwitchAlgorithmForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            endpoint = '.' + str(form.type.data)
+            return redirect(url_for(endpoint, category=category, filename=filename))
+    return render_template('gallery/switch_algorithm.html', category=category, filename=filename, form=form)
+
+
+@gallery.route('/vs/<category>/<filename>', methods=['GET', 'POST'])
+def visible_mark(category, filename):
+    return render_template('gallery/area_select.html', category=category, filename=filename)
+
+
+@gallery.route('/ivs/<category>/<filename>', methods=['GET', 'POST'])
+def invisible_mark(category, filename):
+    return render_template('gallery/area_select.html', category=category, filename=filename)
+
+
+@gallery.route('/pvs/<category>/<filename>', methods=['GET', 'POST'])
+def print_watermark(category, filename):
+    return render_template('gallery/area_select.html', category=category, filename=filename)

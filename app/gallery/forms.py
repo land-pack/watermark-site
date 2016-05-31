@@ -36,8 +36,8 @@ class ImageForm(Form):
     submit = SubmitField('Upload')
 
 
-class ImageEdit(Form):
+class SwitchAlgorithmForm(Form):
     text = StringField('The context of watermark')
-    watermark = SelectField('Watermark Type', choices=[('Visible', 'visible'), ('Invisible', 'invisible'),
-                                                       ('Print-watermark', 'print-watermark')])
+    type = SelectField('Watermark Type', choices=[('visible_mark', 'visible'), ('invisible_mark', 'invisible'),
+                                                  ('print_watermark', 'print-watermark')])
     submit = SubmitField("Go")
