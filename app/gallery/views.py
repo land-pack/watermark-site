@@ -10,13 +10,15 @@ from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm, InvisibleForm
 from app import db
 
 current_path = os.path.abspath('.')
+##################################
 # The below code for Celery ...
 import sys
 from celery import Celery
+import celeryconfig
 
 results = []
 celery = Celery()
-celery.config_from_object('celeryconfig')
+celery.config_from_object(celeryconfig)
 
 
 ###############################
@@ -161,7 +163,12 @@ def invisible_mark(category, filename):
                 abort(404)
         personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
         image_path = personal_dir + filename
-        results.append(celery.send_task("tasks.embed_string", image_path))
+        watermark_context = form.text.data
+        watermark_password = form.password.data
+        watermark_suffix = form.suffix.data
+        results.append(celery.send_task("tasks.embed_string",
+                                        [user.id, category, filename, image_path, watermark_suffix, watermark_context,
+                                         watermark_password]))
         flash('You have process on the background!')
         return redirect(url_for('.lists', category_id=category))
 
@@ -171,3 +178,18 @@ def invisible_mark(category, filename):
 @gallery.route('/pvs/<category>/<filename>', methods=['GET', 'POST'])
 def print_watermark(category, filename):
     return render_template('gallery/area_select.html', category=category, filename=filename)
+
+
+@gallery.route('/extract')
+def extract():
+    return render_template('index.html')
+
+
+@gallery.route('/download')
+def download():
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    if user is None:
+        abort(404)
+
+        return render_template('gallery/index.html', size_album=size_album, albums=albums)
+    return render_template('index.html')

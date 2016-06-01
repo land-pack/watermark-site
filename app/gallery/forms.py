@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import StringField, SubmitField, IntegerField, SelectField
+from wtforms import StringField, SubmitField, IntegerField, SelectField, PasswordField
 from wtforms.validators import Length, DataRequired
 from wtforms import ValidationError
 from flask_wtf.file import FileField
@@ -45,6 +45,8 @@ class SwitchAlgorithmForm(Form):
 
 class InvisibleForm(Form):
     text = StringField('The context of watermark')
+    password = PasswordField("Embed password")
+    suffix = StringField('The context of watermark')
     type = SelectField('Invisible Watermark Algorithm', choices=[('lsb', 'LSB algorithm'), ('qim', 'QIM algorithm'),
                                                                  ('dft', 'Discrete Fourier Transform')])
     submit = SubmitField("Process")
