@@ -9,6 +9,19 @@ from . import gallery
 from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm, InvisibleForm
 from app import db
 
+current_path = os.path.abspath('.')
+# The below code for Celery ...
+import sys
+from celery import Celery
+
+results = []
+celery = Celery()
+celery.config_from_object('celeryconfig')
+
+
+###############################
+# results.append(celery.send_task("tasks.embed_string", [sys.argv[1]]))
+
 
 @gallery.route('/', methods=['GET', 'POST'])
 @gallery.route('/index', methods=['GET', 'POST'])
@@ -142,7 +155,16 @@ def invisible_mark(category, filename):
     form = InvisibleForm()
     if request.method == "POST":
         if form.validate_on_submit():
-            print 'Algorithm', form.type.data
+            #: You celery load the image here~
+            user = User.query.filter_by(username=current_user.username).first_or_404()
+            if user is None:
+                abort(404)
+        personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
+        image_path = personal_dir + filename
+        results.append(celery.send_task("tasks.embed_string", image_path))
+        flash('You have process on the background!')
+        return redirect(url_for('.lists', category_id=category))
+
     return render_template('gallery/invisible.html', category=category, filename=filename, form=form)
 
 
