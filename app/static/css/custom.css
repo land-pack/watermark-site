@@ -1,9 +1,8 @@
-html, body
-{
-	color: #aaa;
-	margin: 0;
-	padding: 0;
-	background: #0b0b0b url('bg.jpg') repeat-x top fixed;
+html, body {
+    color: #fcfcfc;
+    margin: 0;
+    padding: 0;
+    background: #0b0b0b url('bg.jpg') repeat-x top fixed;
 }
 
 .main {
@@ -12,6 +11,14 @@ html, body
 
 a {
     color: #999;
+}
+
+p {
+    color: #fcfcfc;
+}
+
+form {
+    color: #fcfcfc;
 }
 
 a:hover {

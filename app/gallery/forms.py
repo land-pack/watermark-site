@@ -46,7 +46,7 @@ class SwitchAlgorithmForm(Form):
 class InvisibleForm(Form):
     text = StringField('The context of watermark')
     password = PasswordField("Embed password")
-    suffix = StringField('The context of watermark')
+    suffix = StringField('The suffix of embed image')
     type = SelectField('Invisible Watermark Algorithm', choices=[('lsb', 'LSB algorithm'), ('qim', 'QIM algorithm'),
                                                                  ('dft', 'Discrete Fourier Transform')])
     submit = SubmitField("Process")

@@ -68,8 +68,8 @@ def create_album():
             flash('Add a new album successfully!')
             return redirect(url_for('gallery.upload'))
         else:
-
-            return redirect(url_for('.add_category'))
+            flash("Hey! Don't forget put a name for your category!")
+            return redirect(url_for('.create_album'))
     return render_template('gallery/create_album.html', form=form)
 
 
