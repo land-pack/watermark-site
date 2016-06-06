@@ -46,8 +46,8 @@ def index():
 
     # image = albums[0].images.order_by(Image.timestamp.desc()).first()
     images = []
-    for album in albums:
-        Image.query.filter_by(category_id=album.id).first()
+    # for album in albums:
+    #     Image.query.filter_by(category_id=album.id).first()
 
     size_album = len(albums)
     return render_template('gallery/index.html', size_album=size_album, albums=albums)
@@ -91,9 +91,11 @@ def upload():
             if not os.path.exists(album_path):
                 os.mkdir(album_path)
 
+            if form.name.data:
+                filename = form.name.data
             image_url = os.path.join(album_path, filename)
             form.image.data.save(image_url)
-            image = Image(name=form.name.data, category=str(form.category.data), url=image_url, filename=filename,
+            image = Image(name=filename, category=str(form.category.data), url=image_url, filename=filename,
                           category_id=form.category.data.id)
 
             cat = Category.query.filter_by(id=form.category.data.id).first()
@@ -166,9 +168,9 @@ def invisible_mark(category, filename):
         watermark_context = form.text.data
         watermark_password = form.password.data
         watermark_suffix = form.suffix.data
-        results.append(celery.send_task("tasks.embed_string",
-                                        [user.id, category, filename, image_path, watermark_suffix, watermark_context,
-                                         watermark_password]))
+        # results.append(celery.send_task("tasks.embed_string",
+        #                                 [image_id, filename, image_path, watermark_suffix, watermark_context,
+        #                                  watermark_password]))
         flash('You have process on the background!')
         return redirect(url_for('.lists', category_id=category))
 
@@ -185,11 +187,13 @@ def extract():
     return render_template('index.html')
 
 
-@gallery.route('/download')
-def download():
+@gallery.route('/', methods=['GET', 'POST'])
+@gallery.route('/downloads', methods=['GET', 'POST'])
+def downloads():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     if user is None:
         abort(404)
-
-        return render_template('gallery/index.html', size_album=size_album, albums=albums)
-    return render_template('index.html')
+    # albums = Category.query.filter_by(author_id=user.id).all()
+    albums = Category.query.filter_by(author_id=user.id,watermark_count=0)
+    size_album = len(albums)
+    return render_template('gallery/downloads.html', size_album=size_album, albums=albums)
