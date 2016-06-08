@@ -43,3 +43,8 @@ class InvisibleForm(Form):
     type = SelectField('Invisible Watermark Algorithm', choices=[('lsb', 'LSB algorithm'), ('qim', 'QIM algorithm'),
                                                                  ('dft', 'Discrete Fourier Transform')])
     submit = SubmitField("Process")
+
+
+class ExtractForm(Form):
+    image = FileField('Your photo', validators=[DataRequired(), DataRequired()])
+    submit = SubmitField('Upload')

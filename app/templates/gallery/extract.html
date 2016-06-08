@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block content %}
+<h2 style="color: #7ab5d3">Please choose a image and then upload to the website!</h2>
+{{ wtf.quick_form(form,enctype="multipart/form-data")}}
+{% endblock %}

@@ -19,7 +19,7 @@
                 -->
 
                 <li>
-                    <a href="{{ url_for('gallery.upload') }}">Uploads</a>
+                    <a href="{{ url_for('gallery.upload') }}">Upload</a>
                 </li>
                  <li>
                     <a href="{{ url_for('gallery.extract') }}">Extract</a>
@@ -29,6 +29,10 @@
                 </li>
                 <li>
                     <a href="{{ url_for('main.contact') }}">Contact</a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('main.about') }}">About</a>
                 </li>
                 {% endif %}
             </ul>

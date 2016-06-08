@@ -4,9 +4,9 @@ from flask import Blueprint, render_template, request, current_app, send_from_di
     redirect, url_for, flash, abort
 from flask.ext.login import login_user, login_required, current_user
 from werkzeug import secure_filename
-from ..models import User, Image, Category
+from ..models import User, Image, Category, Extract
 from . import gallery
-from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm, InvisibleForm
+from .forms import ImageForm, CategoryForm, SwitchAlgorithmForm, InvisibleForm, ExtractForm
 from app import db
 
 current_path = os.path.abspath('.')
@@ -171,9 +171,20 @@ def print_watermark(category, filename):
     return render_template('gallery/area_select.html', category=category, filename=filename)
 
 
-@gallery.route('/extract')
+@gallery.route('/extract', methods=['GET', 'POST'])
 def extract():
-    return render_template('index.html')
+    form = ExtractForm()
+    if request.method == 'POST':
+        image = Extract()
+        db.session.add(image)
+        db.session.commit()
+        image_id = str(image.id)
+        image_path = os.path.join(current_app.config['EXTRACT_FOLDER'], image_id)
+        form.image.data.save(image_path)
+        # TODO call extract by celery
+        return redirect(url_for('.result', image_id=image_id))
+
+    return render_template('extract.html')
 
 
 @gallery.route('/', methods=['GET', 'POST'])
@@ -210,3 +221,15 @@ def downloading(category_id, image_id):
     image_path = personal_dir + '/' + str(category_id)
     suffix = current_app.config.get('MARK', '')
     return send_from_directory(image_path, suffix + str(image_id), as_attachment=True)
+
+
+@gallery.route('/result/<image_id>')
+def result(image_id):
+    image = Extract.query.filter_by(id=image_id)
+    if image and image.watermark:
+        flash('Extract successful!')
+        watermark_context = image.watermark
+        return render_template('result.html', watermark_context=watermark_context)
+    else:
+        flash('Please try again later!!')
+    return render_template('result.html')

@@ -211,3 +211,10 @@ class Image(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     watermark = db.Column(db.Integer, default=0)
+
+
+class Extract(db.Model):
+    __tablename__ = 'extract'
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    watermark = db.Column(db.String, default='')

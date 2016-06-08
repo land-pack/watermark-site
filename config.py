@@ -12,6 +12,7 @@ class Config:
     LANDPACK_POSTS_PER_PAGE = 20
     LANDPACK_IMAGE_PER_PAGE = 5
     UPLOAD_FOLDER = '/var/lib/watermark-site'
+    EXTRACT_FOLDER = '/tmp/watermark-site'
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'git'])
 
     @staticmethod
