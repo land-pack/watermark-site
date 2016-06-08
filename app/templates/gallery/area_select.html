@@ -7,7 +7,7 @@
 <script src="{{ url_for('static',filename='areaselect/jquery.js')}}"></script>
 <script src="{{ url_for('static',filename='areaselect/jq.select.js')}}"></script>
 
-<img src="{{ url_for('gallery.single_image',category=category,filename=filename)}}" width="540" height="600">
+<img src="{{ url_for('gallery.single_image',category_id=category_id,image_id=image_id)}}" width="540" height="600">
 <button id="get">Get!</button>
 
 <div id="preview" style="display: inline-block"></div>
@@ -44,7 +44,7 @@
                     'display': 'inline-block',
                     'width': area.width,
                     'margin': '10px',
-                    'background-image': 'url({{ url_for("gallery.single_image",category=category,filename=filename)}})',
+                    'background-image': 'url({{ url_for("gallery.single_image",category_id=category_id,image_id=image_id)}})',
                     'background-position': -area.x + 'px ' + (-area.y + 'px')
                 });
                 $preview.append($img);

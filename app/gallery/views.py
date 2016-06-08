@@ -121,33 +121,33 @@ def send_image(category_id, image_id):
     return send_from_directory(personal_dir, image_id)
 
 
-@gallery.route('/editting/<category>/<filename>')
-def single_image(category, filename):
+@gallery.route('/editting/<category_id>/<image_id>')
+def single_image(category_id, image_id):
     # personal_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], category)
     user = User.query.filter_by(username=current_user.username).first_or_404()
     if user is None:
         abort(404)
-    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
-    return send_from_directory(personal_dir, filename)
+    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category_id + '/'
+    return send_from_directory(personal_dir, image_id)
 
 
-@gallery.route('/swa/<category>/<filename>', methods=['GET', 'POST'])
-def switch_algorithm(category, filename):
+@gallery.route('/swa/<category_id>/<image_id>', methods=['GET', 'POST'])
+def switch_algorithm(category_id, image_id):
     form = SwitchAlgorithmForm()
     if request.method == 'POST':
         if form.validate_on_submit():
             endpoint = '.' + str(form.type.data)
-            return redirect(url_for(endpoint, category=category, filename=filename))
-    return render_template('gallery/switch_algorithm.html', category=category, filename=filename, form=form)
+            return redirect(url_for(endpoint, category_id=category_id, image_id=image_id))
+    return render_template('gallery/switch_algorithm.html', category_id=category_id, image_id=image_id, form=form)
 
 
-@gallery.route('/vs/<category>/<filename>', methods=['GET', 'POST'])
-def visible_mark(category, filename):
-    return render_template('gallery/area_select.html', category=category, filename=filename)
+@gallery.route('/vs/<category_id>/<image_id>', methods=['GET', 'POST'])
+def visible_mark(category_id, image_id):
+    return render_template('gallery/area_select.html', category_id=category_id, image_id=image_id)
 
 
-@gallery.route('/ivs/<category>/<filename>', methods=['GET', 'POST'])
-def invisible_mark(category, filename):
+@gallery.route('/ivs/<category_id>/<image_id>', methods=['GET', 'POST'])
+def invisible_mark(category_id, image_id):
     form = InvisibleForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -155,23 +155,22 @@ def invisible_mark(category, filename):
             user = User.query.filter_by(username=current_user.username).first_or_404()
             if user is None:
                 abort(404)
-        personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
-        # image_path = personal_dir + filename
-        # watermark_context = form.text.data
-        # watermark_password = form.password.data
-        # watermark_suffix = form.suffix.data
-        # results.append(celery.send_task("tasks.embed_string",
-        #                                 [image_id, filename, image_path, watermark_suffix, watermark_context,
-        #                                  watermark_password]))
+        personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category_id + '/'
+        image_path = personal_dir + image_id
+        watermark_context = form.text.data
+        watermark_password = form.password.data
+        suffix = current_app.config.get('MARK', '')
+        # celery.send_task("tasks.embed_string",
+        #                  [image_path, image_id, suffix, watermark_context, watermark_password])
         flash('You have process on the background!')
-        return redirect(url_for('.lists', category_id=category))
+        return redirect(url_for('.lists', category_id=category_id))
 
-    return render_template('gallery/invisible.html', category=category, filename=filename, form=form)
+    return render_template('gallery/invisible.html', category_id=category_id, image_id=image_id, form=form)
 
 
-@gallery.route('/pvs/<category>/<filename>', methods=['GET', 'POST'])
-def print_watermark(category, filename):
-    return render_template('gallery/area_select.html', category=category, filename=filename)
+@gallery.route('/pvs/<category_id>/<image_id>', methods=['GET', 'POST'])
+def print_watermark(category_id, image_id):
+    return render_template('gallery/area_select.html', category_id=category_id, image_id=image_id)
 
 
 @gallery.route('/extract', methods=['GET', 'POST'])

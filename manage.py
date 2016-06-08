@@ -6,7 +6,7 @@ from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
 # ON production should change the default to 'production'
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(os.getenv('WATERMARK_CONFIG') or 'default')
 app.debug = True
 manager = Manager(app)
 migrate = Migrate(app, db)
