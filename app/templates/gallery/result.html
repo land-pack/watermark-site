@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block content %}
+<h1 style="color: #d9edf7"> The target image had extract watermark context </h1>
+<div class="col">
+    <div class="col-md-6">
+        <img src="{{ url_for('gallery.send_image',category_id='tmp',image_id=image_id )}}"
+             alt=""
+             class="span4"/>
+    </div>
+    <div class="col-md-6">
+        <h3 style="color: #942a25">{{ watermark_context}}</h3>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+
+{% block content %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="{{ url_for('static',filename='css-2/imgareaselect-default.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css-2/imgareaselect-animated.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='css-2/imgareaselect-deprecated.css') }}" rel="stylesheet">
+
+<div class="container demo">
+    <div style="float: left; width: 50%;">
+
+        <div class="frame" style="margin: 0 0.3em; width: 300px; height: 300px;">
+            <img id="myphoto" src="{{ url_for('gallery.send_image',category_id='tmp',image_id=image_id)}}"
+                 style="width: 300px; height: 300px;"/>
+        </div>
+    </div>
+
+    <div style="float: left; width: 50%;">
+        <p style="font-size: 110%; font-weight: bold; padding-left: 0.1em;">
+            Watermark context extract result!
+        </p>
+
+        <h3 style="color: #942a25">{{ watermark_context}}</h3>
+    </div>
+</div>
+{% endblock %}

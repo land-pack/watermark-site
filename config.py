@@ -13,6 +13,7 @@ class Config:
     LANDPACK_IMAGE_PER_PAGE = 5
     UPLOAD_FOLDER = '/var/lib/watermark-site'
     EXTRACT_FOLDER = '/tmp/watermark-site'
+    MARK = 'steg_'
     ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'git'])
 
     @staticmethod
@@ -38,6 +39,11 @@ class TestingConfig(Config):
 
 
 class ProductionConfig(Config):
+    MAIL_SERVER = 'smtp.sina.com'
+    MAIL_PORT = 25
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
                               'sqlite:///' + os.path.join(basedir, 'data.sqlite')
 

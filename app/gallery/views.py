@@ -114,7 +114,10 @@ def send_image(category_id, image_id):
     user = User.query.filter_by(username=current_user.username).first_or_404()
     if user is None:
         abort(404)
-    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category_id + '/'
+    if category_id == 'tmp':
+        personal_dir = current_app.config['EXTRACT_FOLDER'] + '/'
+    else:
+        personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category_id + '/'
     return send_from_directory(personal_dir, image_id)
 
 
@@ -179,12 +182,17 @@ def extract():
         db.session.add(image)
         db.session.commit()
         image_id = str(image.id)
-        image_path = os.path.join(current_app.config['EXTRACT_FOLDER'], image_id)
+        tmp_path = current_app.config['EXTRACT_FOLDER']
+        image_path = os.path.join(tmp_path, image_id)
+        if not os.path.exists(tmp_path):
+            os.mkdir(tmp_path)
         form.image.data.save(image_path)
         # TODO call extract by celery
+        flash('You task had send to celery! you will redirect to a result page!')
         return redirect(url_for('.result', image_id=image_id))
-
-    return render_template('extract.html')
+    else:
+        flash('Please upload your target image!')
+    return render_template('gallery/extract.html', form=form)
 
 
 @gallery.route('/', methods=['GET', 'POST'])
@@ -225,11 +233,17 @@ def downloading(category_id, image_id):
 
 @gallery.route('/result/<image_id>')
 def result(image_id):
-    image = Extract.query.filter_by(id=image_id)
-    if image and image.watermark:
-        flash('Extract successful!')
+    image = Extract.query.filter_by(id=image_id).first()
+    if image:
+        flash('Extract done!')
         watermark_context = image.watermark
-        return render_template('result.html', watermark_context=watermark_context)
+        watermark_context = 'something'
+        if watermark_context:
+            flash('The target image have mark with watermark!')
+            return render_template('gallery/show_result.html', image_id=image_id, watermark_context=watermark_context)
+        else:
+            flash('The target image can\'t extract any watermark!')
+            return redirect(url_for('.extract'))
     else:
         flash('Please try again later!!')
-    return render_template('result.html')
+    return render_template('gallery/show_result.html')
