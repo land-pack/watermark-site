@@ -186,7 +186,6 @@ def downloads():
     albums = Category.query.filter_by(author_id=user.id).all()
     watermark_albums = []
     for album in albums:
-        print 'wc', album.watermark_count
         if album.watermark_count == 0:
             # Because there are no more than one image have watermark!!
             # album = []  # empty the no-useful query result!
@@ -195,7 +194,6 @@ def downloads():
             # album = Category.query.filter_by(author_id=user.id)
             watermark_albums.append(album)
     size_album = len(watermark_albums)
-    print watermark_albums
     return render_template('gallery/downloads.html', size_album=size_album, albums=watermark_albums)
 
 
