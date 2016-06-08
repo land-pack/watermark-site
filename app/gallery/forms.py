@@ -7,12 +7,6 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from ..models import Category
 
 
-# class ImageForm(Form):
-#     name = StringField('Image Name', validators=[Length(1, 64)])
-#     tag = IntegerField('Tag Value', default=50, validators=[DataRequired(), Length(1, 64)])
-#     image = FileField('Your photo')
-#     submit = SubmitField('Upload Image')
-
 def enabled_categories():
     return Category.query.all()
 
@@ -23,7 +17,6 @@ class CategoryForm(Form):
 
 
 class ImageForm(Form):
-    name = StringField('Name', validators=[Length(1, 64)])
     category = QuerySelectField(query_factory=enabled_categories, get_label='name', allow_blank=True,
                                 validators=[DataRequired()])
 
