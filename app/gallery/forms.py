@@ -46,4 +46,5 @@ class InvisibleForm(Form):
 
 class ExtractForm(Form):
     image = FileField('Your photo', validators=[DataRequired(), DataRequired()])
+    password = PasswordField("Extract password")
     submit = SubmitField('Upload')

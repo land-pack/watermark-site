@@ -176,7 +176,7 @@ def print_watermark(category_id, image_id):
 @gallery.route('/extract', methods=['GET', 'POST'])
 def extract():
     form = ExtractForm()
-    if request.method == 'POST':
+    if request.method == 'POST' and form.password.data:
         image = Extract()
         db.session.add(image)
         db.session.commit()
@@ -186,7 +186,7 @@ def extract():
         if not os.path.exists(tmp_path):
             os.mkdir(tmp_path)
         form.image.data.save(image_path)
-        # TODO call extract by celery
+        celery.send_task('tasks.extract', [image_id, form.password.data])
         flash('You task had send to celery! you will redirect to a result page!')
         return redirect(url_for('.result', image_id=image_id))
     else:
