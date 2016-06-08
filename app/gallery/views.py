@@ -32,23 +32,10 @@ def index():
     user = User.query.filter_by(username=current_user.username).first_or_404()
     if user is None:
         abort(404)
-
-    # pagination = user.image.order_by(Image.timestamp.desc()).paginate(
-    #         page, per_page=current_app.config['LANDPACK_IMAGE_PER_PAGE'],
-    #         error_out=False
-    # )
-    # posts = pagination.items
-    # return render_template('gallery/index.html', posts=posts, pagination=pagination)
     albums = Category.query.filter_by(author_id=user.id).all()
     if len(albums) == 0:
         flash('You have to create a album!')
         return redirect(url_for('.create_album'))
-
-    # image = albums[0].images.order_by(Image.timestamp.desc()).first()
-    images = []
-    # for album in albums:
-    #     Image.query.filter_by(category_id=album.id).first()
-
     size_album = len(albums)
     return render_template('gallery/index.html', size_album=size_album, albums=albums)
 
@@ -93,16 +80,18 @@ def upload():
 
             if form.name.data:
                 filename = form.name.data
-            image_url = os.path.join(album_path, filename)
-            form.image.data.save(image_url)
-            image = Image(name=filename, category=str(form.category.data), url=image_url, filename=filename,
-                          category_id=form.category.data.id)
-
-            cat = Category.query.filter_by(id=form.category.data.id).first()
-            cat.add_one(filename)  # Update the album counter by call instance method!
-            db.session.add(cat)
+            # image_url = os.path.join(album_path, filename)
+            # form.image.data.save(image_url)
+            image = Image(category=str(form.category.data), category_id=form.category.data.id)
             db.session.add(image)
             db.session.commit()
+            image_id = str(image.id)
+            image_path = os.path.join(album_path, image_id)
+            form.image.data.save(image_path)
+            cat = Category.query.filter_by(id=form.category.data.id).first()
+            cat.add_one(image_id)  # Update the album counter by call instance method!
+            db.session.add(cat)
+
             flash('Upload image successfully!')
             return redirect(url_for('gallery.index'))
         else:
@@ -119,14 +108,14 @@ def lists(category_id):
     return render_template('gallery/lists.html', images=images)
 
 
-@gallery.route('/heads/<category>/<filename>')
-def send_image(category, filename):
+@gallery.route('/heads/<category_id>/<image_id>')
+def send_image(category_id, image_id):
     # personal_dir = os.path.join(current_app.config['UPLOAD_FOLDER'], category)
     user = User.query.filter_by(username=current_user.username).first_or_404()
     if user is None:
         abort(404)
-    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
-    return send_from_directory(personal_dir, filename)
+    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category_id + '/'
+    return send_from_directory(personal_dir, image_id)
 
 
 @gallery.route('/editting/<category>/<filename>')
@@ -164,10 +153,10 @@ def invisible_mark(category, filename):
             if user is None:
                 abort(404)
         personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(user.id) + '/' + category + '/'
-        image_path = personal_dir + filename
-        watermark_context = form.text.data
-        watermark_password = form.password.data
-        watermark_suffix = form.suffix.data
+        # image_path = personal_dir + filename
+        # watermark_context = form.text.data
+        # watermark_password = form.password.data
+        # watermark_suffix = form.suffix.data
         # results.append(celery.send_task("tasks.embed_string",
         #                                 [image_id, filename, image_path, watermark_suffix, watermark_context,
         #                                  watermark_password]))
@@ -194,6 +183,32 @@ def downloads():
     if user is None:
         abort(404)
     # albums = Category.query.filter_by(author_id=user.id).all()
-    albums = Category.query.filter_by(author_id=user.id,watermark_count=0)
-    size_album = len(albums)
-    return render_template('gallery/downloads.html', size_album=size_album, albums=albums)
+    albums = Category.query.filter_by(author_id=user.id).all()
+    watermark_albums = []
+    for album in albums:
+        print 'wc', album.watermark_count
+        if album.watermark_count == 0:
+            # Because there are no more than one image have watermark!!
+            # album = []  # empty the no-useful query result!
+            pass
+        else:
+            # album = Category.query.filter_by(author_id=user.id)
+            watermark_albums.append(album)
+    size_album = len(watermark_albums)
+    print watermark_albums
+    return render_template('gallery/downloads.html', size_album=size_album, albums=watermark_albums)
+
+
+@gallery.route('/downloads/<category_id>')
+def download(category_id):
+    album = Category.query.filter_by(id=category_id).first()
+    images = album.images.order_by(Image.timestamp.desc())
+    return render_template('gallery/download.html', images=images)
+
+
+@gallery.route('/downloading/<category_id>/<image_id>', methods=['GET', 'POST'])
+def downloading(category_id, image_id):
+    personal_dir = current_app.config['UPLOAD_FOLDER'] + '/' + str(current_user.id)
+    image_path = personal_dir + '/' + str(category_id)
+    suffix = current_app.config.get('MARK', '')
+    return send_from_directory(image_path, suffix + str(image_id), as_attachment=True)

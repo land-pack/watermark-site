@@ -190,24 +190,24 @@ class Category(db.Model):
     count = db.Column(db.Integer, default=0)
     conver_url = db.Column(db.String)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    watermark_count = db.Column(db.Integer,default=0)
+    watermark_count = db.Column(db.Integer, default=0)
 
-    def add_one(self, filename):
+    def add_one(self, image_id):
         if self.count:
             self.count += 1
         else:
             # init value as integer
             self.count = 1
-            self.conver_url = filename
+            self.conver_url = image_id
 
 
 class Image(db.Model):
     __tablename__ = 'images'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    filename = db.Column(db.String)
+    # name = db.Column(db.String)
+    # filename = db.Column(db.String)
     category = db.Column(db.String)
-    url = db.Column(db.String)
+    # url = db.Column(db.String)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
     watermark = db.Column(db.Integer, default=0)

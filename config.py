@@ -7,7 +7,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
     LANDPACK_MAIL_SUBJECT_PREFIX = '[Gallery]'
-    LANDPACK_MAIL_SENDER = 'Landpack <landpack@sina.com>'
+    LANDPACK_MAIL_SENDER = 'landpack@sina.com'
     ADMIN = '123@qq.com'
     LANDPACK_POSTS_PER_PAGE = 20
     LANDPACK_IMAGE_PER_PAGE = 5

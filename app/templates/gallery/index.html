@@ -14,7 +14,7 @@
         {% if albums[index].count > 0 %}
         <li class="gallery span4">
             <a href="{{ url_for('gallery.lists',category_id=albums[index].id) }}" class="thumbnail">
-                <img src="{{ url_for('gallery.send_image',category=albums[index].id,filename=albums[index].conver_url )}}"
+                <img src="{{ url_for('gallery.send_image',category_id=albums[index].id,image_id=albums[index].conver_url )}}"
                      alt=""
                      class="span4"/>
 
