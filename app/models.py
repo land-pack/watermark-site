@@ -184,11 +184,11 @@ from datetime import datetime
 class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String(64))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     images = db.relationship('Image', backref='cate', lazy='dynamic')
     count = db.Column(db.Integer, default=0)
-    conver_url = db.Column(db.String)
+    conver_url = db.Column(db.String(128))
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     watermark_count = db.Column(db.Integer, default=0)
 
@@ -206,7 +206,7 @@ class Image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # name = db.Column(db.String)
     # filename = db.Column(db.String)
-    category = db.Column(db.String)
+    category = db.Column(db.String(128))
     # url = db.Column(db.String)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
@@ -217,4 +217,4 @@ class Extract(db.Model):
     __tablename__ = 'extract'
     id = db.Column(db.Integer, primary_key=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    watermark = db.Column(db.String, default='')
+    watermark = db.Column(db.String(128), default='')

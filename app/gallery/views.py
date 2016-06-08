@@ -64,8 +64,7 @@ def create_album():
 def upload():
     form = ImageForm()
     if request.method == 'POST':
-        if form.image.data.filename and form.category.data:
-            filename = secure_filename(form.image.data.filename)
+        if form.image.data and form.category.data:
             user = User.query.filter_by(username=current_user.username).first_or_404()
             if user is None:
                 abort(404)
@@ -78,10 +77,6 @@ def upload():
             if not os.path.exists(album_path):
                 os.mkdir(album_path)
 
-            if form.name.data:
-                filename = form.name.data
-            # image_url = os.path.join(album_path, filename)
-            # form.image.data.save(image_url)
             image = Image(category=str(form.category.data), category_id=form.category.data.id)
             db.session.add(image)
             db.session.commit()
@@ -186,7 +181,7 @@ def extract():
         if not os.path.exists(tmp_path):
             os.mkdir(tmp_path)
         form.image.data.save(image_path)
-        celery.send_task('tasks.extract', [image_id, form.password.data])
+        # celery.send_task('tasks.extract', [image_id, form.password.data])
         flash('You task had send to celery! you will redirect to a result page!')
         return redirect(url_for('.result', image_id=image_id))
     else:
@@ -236,7 +231,7 @@ def result(image_id):
     if image:
         flash('Extract done!')
         watermark_context = image.watermark
-        watermark_context = 'something'
+        # watermark_context = 'something'
         if watermark_context:
             flash('The target image have mark with watermark!')
             return render_template('gallery/show_result.html', image_id=image_id, watermark_context=watermark_context)
