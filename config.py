@@ -6,6 +6,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = True  # If you got warning just set it!
     LANDPACK_MAIL_SUBJECT_PREFIX = '[Gallery]'
     LANDPACK_MAIL_SENDER = 'landpack@sina.com'
     ADMIN = '123@qq.com'
