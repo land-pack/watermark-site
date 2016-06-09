@@ -1,9 +1,7 @@
 Dear {{ user.username }},
 Welcome to NASA!
 To confirm your account please click on the following link:
-{% set xx= url_for('auth.confirm', token=token, _external=True) %}
-{% set yy=xx.replace('http://127.0.0.1:5000','http://192.168.1.4') %}
-{{ yy }}
+<p>{{ url_for('auth.confirm', token=token, _external=True)}}</p>
 Sincerely,
 The NASA Team
 Note: replies to this email address are not monitored.

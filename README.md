@@ -60,3 +60,8 @@ python manage.py db upgrade
 Run it
 ------
 python manage.py runserver
+
+QA
+--
+Q: My mail context always with `127.0.0.1:5000` , How to make point to public IP address?
+A: Use jinjia2 method, and call string method `replace`

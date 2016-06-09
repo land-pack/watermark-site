@@ -4,9 +4,7 @@ To confirm your new email address click on the following link:
 
 {{ url_for('auth.change_email', token=token, _external=True) }}
 
-{% set xx= url_for('auth.change_email', token=token, _external=True) %}
-{% set yy=xx.replace('http://127.0.0.1:5000','http://192.168.1.4') %}
-{{ yy }}
+<p>{{ url_for('auth.change_email', token=token, _external=True) }}</p>
 
 Sincerely,
 
