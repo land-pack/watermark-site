@@ -154,9 +154,8 @@ def invisible_mark(category_id, image_id):
         image_path = personal_dir + image_id
         watermark_context = form.text.data
         watermark_password = form.password.data
-        suffix = current_app.config.get('MARK', '')
         # celery.send_task("tasks.embed_string",
-        #                  [image_path, image_id, suffix, watermark_context, watermark_password])
+        #                  [image_path,category_id image_id,watermark_context, watermark_password])
         flash('You have process on the background!')
         return redirect(url_for('.lists', category_id=category_id))
 
