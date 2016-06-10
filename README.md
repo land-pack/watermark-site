@@ -64,3 +64,14 @@ python manage.py runserver
 Ref
 --
 http://stackoverflow.com/questions/22312014/flask-redirecturl-for-error-with-gunricorn-nginx
+
+Bug
+--
+If you run the web on supervisor, you should configure something on `config.py` instead export environment!
+```python
+    MAIL_USERNAME = 'landpack@sina.com'                       
+    MAIL_PASSWORD = 'landpack911!@#'                          
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:openos@127.0.0.1:3306/watermark_site'
+
+    'default': ProductionConfig
+```

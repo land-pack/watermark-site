@@ -86,6 +86,7 @@ def upload():
             cat = Category.query.filter_by(id=form.category.data.id).first()
             cat.add_one(image_id)  # Update the album counter by call instance method!
             db.session.add(cat)
+            db.session.commit()
 
             flash('Upload image successfully!')
             return redirect(url_for('gallery.index'))
@@ -155,7 +156,7 @@ def invisible_mark(category_id, image_id):
         watermark_context = form.text.data
         watermark_password = form.password.data
         # celery.send_task("tasks.embed_string",
-        #                  [image_path,category_id image_id,watermark_context, watermark_password])
+        #                  [image_path,category_id,image_id,watermark_context, watermark_password])
         flash('You have process on the background!')
         return redirect(url_for('.lists', category_id=category_id))
 
@@ -182,7 +183,7 @@ def extract():
         form.image.data.save(image_path)
         # celery.send_task('tasks.extract', [image_id, form.password.data])
         flash('You task had send to celery! you will redirect to a result page!')
-        return redirect(url_for('result', image_id=image_id))
+        return redirect(url_for('.result', image_id=image_id))
     else:
         flash('Please upload your target image!')
     return render_template('gallery/extract.html', form=form)
@@ -235,7 +236,6 @@ def result(image_id):
             return render_template('gallery/show_result.html', image_id=image_id, watermark_context=watermark_context)
         else:
             flash('Please refresh later!')
-            return redirect(url_for('result'))
     else:
         flash('Please try again later!!')
     return render_template('gallery/show_result.html')

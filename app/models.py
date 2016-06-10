@@ -198,7 +198,7 @@ class Category(db.Model):
         else:
             # init value as integer
             self.count = 1
-            self.conver_url = image_id
+            self.conver_url = str(image_id)
 
 
 class Image(db.Model):
